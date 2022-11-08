@@ -34,7 +34,7 @@ function randomString(len, an) {
         await page.waitForURL('https://hrm-dev.dev-test.pro/employees/create');
         await page.getByLabel('Имя').click();
 
-        await page.getByLabel('Имя').fill('Boris' + randomString(10, "a"));; // randomString(10, "a") - adding random string text
+        await page.getByLabel('Имя').fill('Boris' + randomString(10, "a")); // randomString(10, "a") - adding random string text
         await page.getByLabel('Фамилия').click();
         await page.getByLabel('Фамилия').fill('Britva');
         await page.getByRole('textbox', { name: 'Номер телефона *' }).click();
@@ -48,8 +48,36 @@ function randomString(len, an) {
         await page.getByRole('textbox', { name: 'Новый пароль *' }).fill('12345Hur')
         await page.getByLabel('Подтвердить новый пароль').click()
         await page.getByLabel('Подтвердить новый пароль').fill('12345Hur')
+        await page.pause()
         await page.waitForTimeout(1000)
         await page.getByRole('button', { name: 'Сохранить' }).first().click()
         await page.waitForTimeout(500)
         await page.getByText('Данные сотрудника созданы').click()
  })
+
+ test('Создание профиля сотрудника с невалидными данными поля "Имя" (цифра)', async ({page})=> {
+  const adding_uses = new AddingUser(page)
+  await adding_uses.createUser('123456789', 'Britva')
+  await expect (page.getByText('Поле может содержать только латинские буквы')).toBeVisible()
+})
+
+test('Создание профиля сотрудника с невалидными данными поля "Имя" (кириллица)', async ({page})=> {
+  const adding_uses = new AddingUser(page)
+  await adding_uses.createUser('Борис', 'Britva')
+  await expect (page.getByText('Поле может содержать только латинские буквы')).toBeVisible()
+  await page.pause()
+})
+
+test.only('Создание профиля сотрудника с невалидными данными поля "Имя" (Цифры и спецсимволы)', async ({page})=> {
+  const adding_uses = new AddingUser(page)
+  await adding_uses.createUser('1234567890!@$%^', 'Britva')
+  await expect (page.getByText('Поле может содержать только латинские буквы')).toBeVisible()
+  await page.pause()
+})
+
+test.only('//Создание профиля сотрудника с невалидными данными поля "Фамилия" (кириллица)', async ({page})=> {
+  const adding_uses = new AddingUser(page)
+  await adding_uses.createUser('Boris', 'Бритва')
+  await expect (page.getByText('Поле может содержать только латинские буквы')).toBeVisible()
+  await page.pause()
+})
