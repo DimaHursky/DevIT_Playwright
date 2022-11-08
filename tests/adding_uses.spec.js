@@ -65,19 +65,42 @@ test('Создание профиля сотрудника с невалидны
   const adding_uses = new AddingUser(page)
   await adding_uses.createUser('Борис', 'Britva')
   await expect (page.getByText('Поле может содержать только латинские буквы')).toBeVisible()
-  await page.pause()
 })
 
-test.only('Создание профиля сотрудника с невалидными данными поля "Имя" (Цифры и спецсимволы)', async ({page})=> {
+test('Создание профиля сотрудника с невалидными данными поля "Имя" (Цифры и спецсимволы)', async ({page})=> {
   const adding_uses = new AddingUser(page)
   await adding_uses.createUser('1234567890!@$%^', 'Britva')
   await expect (page.getByText('Поле может содержать только латинские буквы')).toBeVisible()
-  await page.pause()
 })
 
-test.only('//Создание профиля сотрудника с невалидными данными поля "Фамилия" (кириллица)', async ({page})=> {
+test('Создание профиля сотрудника с невалидными данными поля "Фамилия" (кириллица)', async ({page})=> {
   const adding_uses = new AddingUser(page)
   await adding_uses.createUser('Boris', 'Бритва')
   await expect (page.getByText('Поле может содержать только латинские буквы')).toBeVisible()
-  await page.pause()
 })
+test('Создание профиля сотрудника с невалидными данными поля "Фамилия" (цифра)', async ({page})=> {
+  const adding_uses = new AddingUser(page)
+  await adding_uses.createUser('Boris', '1234567890')
+  await expect (page.getByText('Поле может содержать только латинские буквы')).toBeVisible()
+})
+
+test('Создание профиля сотрудника с невалидными данными поля "Имя" (пустое поле)', async ({page})=> {
+  const adding_uses = new AddingUser(page)
+  await adding_uses.createInvalidUser('', 'Boris')
+  await page.getByLabel('Имя').click();  
+  await expect (page.getByText('Введите имя (не менее 2 символов)')).toBeVisible()
+})
+
+test('Создание профиля сотрудника с невалидными данными поля "Фамилия" (пустое поле)', async ({page})=> {
+  const adding_uses = new AddingUser(page)
+  await adding_uses.createInvalidUser('Boris', '')
+  await page.getByLabel('Фамилия').click();  
+  await expect (page.getByText('Введите имя (не менее 2 символов)')).toBeVisible()
+})
+
+// test.only('Создание профиля сотрудника с невалидными данными поля "Номер телефона" (пустое поле)', async ({page})=> {
+//   const adding_uses = new AddingUser(page)
+//   await adding_uses.createInvalidUser('Boris', 'Britva')
+//   await page.pause()
+//   await expect (page.getByText('Введите имя (не менее 2 символов)')).toBeVisible()
+// })
