@@ -93,4 +93,5 @@ async createInvalidUser(firstName, lastName) {
         await this.page.getByRole('tab', { name: 'Данные сотрудника' }).click()
           
         
-          }  }
+          
+      }  }

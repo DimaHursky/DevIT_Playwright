@@ -97,7 +97,7 @@ test('Создание профиля сотрудника с невалидны
   await page.getByLabel('Фамилия').click();  
   await expect (page.getByText('Введите имя (не менее 2 символов)')).toBeVisible()
 })
-
+//
 // test.only('Создание профиля сотрудника с невалидными данными поля "Номер телефона" (пустое поле)', async ({page})=> {
 //   const adding_uses = new AddingUser(page)
 //   await adding_uses.createInvalidUser('Boris', 'Britva')
