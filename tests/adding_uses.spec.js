@@ -1,7 +1,6 @@
 const {test, expect} = require('@playwright/test');
 const { AddingUser } = require('./pages/adding_uses.page');
 const { LoginPage } = require('./pages/login_page');
-//const {helloworld, hello} = require('./pages/page')
 
 test.beforeEach(async ({ page }, testInfo) => {
     console.log(`adding users  ${testInfo.title}`);
@@ -99,19 +98,32 @@ test('Создание профиля сотрудника с невалидны
   await expect (page.getByText('Сохранить')).toBeDisabled()
 })
 
-test.only('Создание профиля сотрудника с невалидными данными поля "Новый пароль" (оставить пустым)', async ({page})=> {
+test('Создание профиля сотрудника с невалидными данными поля "Новый пароль" (оставить пустым)', async ({page})=> {
   const adding_uses = new AddingUser(page)
-  await adding_uses.emptyPassvordFil('12345Hur', '')
+  await adding_uses.fllPassvordFil('12345Hur', '')
   await adding_uses.newPasswordFld.click()
   await expect (page.getByText('Обязательное поле')).toBeVisible()
   await expect (page.getByText('Сохранить')).toBeDisabled()
 })
 
+test('Создание профиля сотрудника с невалидными данными поля "Новый пароль" (11111111)', async ({page})=> {
+  const adding_uses = new AddingUser(page)
+  await adding_uses.fllPassvordFil('11111111', '11111111')
+  await expect (adding_uses.errorMessage6to16symbols).toBeVisible()
+  await expect (adding_uses.errorMessage6to16symbolsforSecondFld).toBeVisible()
+})
 
-//
-// test.only('Создание профиля сотрудника с невалидными данными поля "Номер телефона" (пустое поле)', async ({page})=> {
-//   const adding_uses = new AddingUser(page)
-//   await adding_uses.createInvalidUser('Boris', 'Britva')
-//   await page.pause()
-//   await expect (page.getByText('Введите имя (не менее 2 символов)')).toBeVisible()
-// })
+test('Создание профиля сотрудника с невалидными данными поля "Подтвердить новый пароль" (11111111111)', async ({page})=> {
+  const adding_uses = new AddingUser(page)
+  await adding_uses.fllPassvordFil('12345Hur', '11111111111')
+  await expect (page.locator('text = Новый пароль и подтверждение должны совпадать')).toBeVisible()
+  await expect (page.locator('text = Пароль должен содержать от 8 до 16 символов, 1 цифру, 1 заглавную букву')).toBeVisible()
+})
+
+test('Создание профиля сотрудника с существующими данными', async ({page})=> {
+  const adding_uses = new AddingUser(page)
+  await adding_uses.validLogin('Boris', 'Britva')
+  await page.waitForSelector('text=Сотрудник существует')
+  await expect (page.locator('text = Сотрудник существует')).toBeVisible()
+})
+
