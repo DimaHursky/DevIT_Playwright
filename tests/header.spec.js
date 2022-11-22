@@ -33,7 +33,7 @@ test.beforeEach(async ({ page }, testInfo) => {
 /**
  * Выход из учетной записи
  */
- test.only('Выход из учетной записи', async({page}) => {
+ test('Выход из учетной записи', async({page}) => {
   const headerPage = new HeaderPage(page)
   await headerPage.userLogo.click()
   await page.waitForTimeout(500)
