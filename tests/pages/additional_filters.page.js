@@ -1,4 +1,5 @@
 const {expect, waitForTimeout, waitForSelector, isEnabled, check} = require('@playwright/test');
+const { LoginPage } = require('./login_page');
 exports.AdditionalFilters = class AdditionalFilters {
     
 constructor(page) {
@@ -17,11 +18,20 @@ constructor(page) {
     this.creationChkBx = page.locator('#PolarisOptionList1-2 >> text=Создание') // - Создание
     this.featureCreateRoles = page.getByAltText('Возможность: Создание ролей')
 
-    this.
+    // this.editRolesChkBox = 
+    // this.featureEditRoles = 
+
+    // this.readingRolesChkBox = 
+    // this.featureReadingRoles
+
+    // this.deleteRolesChkBox = 
+    // this.featureDeleteRoles = 
+
+    //СОТРУДНИКИ
 
 
     this.performedBtn = page.locator('text = Выполнено')
-    this.wait = page.waitForTimeout(500)
+    this.wait = page.waitForTimeout(1000)
     this.pause = page.pause()
 
     }
@@ -29,6 +39,21 @@ constructor(page) {
         await this.additionalFiltersBtn.click(); //Відкрити меню (Дополнительные фильтры)
         await this.accessRightsBtn.click({ timeout: 3000 }); //відкрити випадаючий список (права доступу)
         await this.wait
+    }  
+
+    async openAccessR(test1) {
+        //const loginPage = new LoginPage(page)
+        await this.pause
+        await this.additionalFiltersBtn.click(); //Відкрити меню (Дополнительные фильтры)
+        await this.accessRightsBtn.click({ timeout: 3000 }); //відкрити випадаючий список (права доступу)
+        await this.wait
+        await this.creationChkBx.isEnabled({ timeout: 10000 }); 
+        await this.creationChkBx.check() 
+        expect(await (test1).isChecked()).toBeTruthy() 
+        //expect(await (this.creationChkBx).isChecked()).toBeTruthy() 
+        await this.performedBtn.click()
+        expect(await this.featureCreateRoles); 
+        
     }  
 
 
