@@ -1,4 +1,4 @@
-# DevIT_Playwright
+# DevIT_Ecosystem_PlayWright
 
 npx playwright test ./tests/adding_uses.spec.js --project chromium --headed //для відобреження тесту
 
